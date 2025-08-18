@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import gun0912.tedimagepicker.builder.TedImagePicker
 import gun0912.tedimagepicker.builder.TedRxImagePicker
+import gun0912.tedimagepicker.builder.type.MediaType
 import gun0912.tedimagepicker.sample.databinding.ActivityMainBinding
 import gun0912.tedimagepicker.sample.databinding.ItemImageBinding
 
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private fun setNormalSingleButton() {
         binding.btnNormalSingle.setOnClickListener {
             TedImagePicker.with(this)
+                .mediaType(MediaType.IMAGE_AND_VIDEO)
                 .start { uri -> showSingleImage(uri) }
         }
     }
@@ -43,7 +45,9 @@ class MainActivity : AppCompatActivity() {
     private fun setNormalMultiButton() {
         binding.btnNormalMulti.setOnClickListener {
             TedImagePicker.with(this)
-                //.mediaType(MediaType.IMAGE)
+                .mediaType(MediaType.IMAGE_AND_VIDEO)
+                .showCameraTile(false)
+                .zoomIndicator(false)
                 //.scrollIndicatorDateFormat("YYYYMMDD")
                 //.buttonGravity(ButtonGravity.BOTTOM)
                 //.buttonBackground(R.drawable.btn_sample_done_button)

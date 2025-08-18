@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import gun0912.tedimagepicker.util.Logger
 
 internal abstract class BaseRecyclerViewAdapter<D, VH : BaseViewHolder<ViewDataBinding, D>>(private var headerCount: Int = 0) :
     RecyclerView.Adapter<VH>() {
@@ -21,6 +22,8 @@ internal abstract class BaseRecyclerViewAdapter<D, VH : BaseViewHolder<ViewDataB
     }
 
     open fun replaceAll(items: List<D>, useDiffCallback: Boolean = false) {
+        Logger.verbose("+")
+
         val diffCallback = BaseDiffUtilCallback(this.items, items)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
@@ -52,6 +55,8 @@ internal abstract class BaseRecyclerViewAdapter<D, VH : BaseViewHolder<ViewDataB
     abstract fun getViewHolder(parent: ViewGroup, viewType: ViewType): VH
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        Logger.verbose("viewType = $viewType")
+
         return getViewHolder(parent, ViewType.getViewType(viewType)).apply {
             onItemClickListener?.let { listener ->
                 itemView.setOnClickListener {
@@ -73,6 +78,7 @@ internal abstract class BaseRecyclerViewAdapter<D, VH : BaseViewHolder<ViewDataB
 
 
     override fun onBindViewHolder(holder: VH, position: Int) {
+        Logger.verbose("position = $position")
 
         when (getViewType(position)) {
             ViewType.HEADER -> {
@@ -84,6 +90,8 @@ internal abstract class BaseRecyclerViewAdapter<D, VH : BaseViewHolder<ViewDataB
 
 
     override fun onViewRecycled(holder: VH) {
+        Logger.verbose("+")
+
         holder.recycled()
         super.onViewRecycled(holder)
     }

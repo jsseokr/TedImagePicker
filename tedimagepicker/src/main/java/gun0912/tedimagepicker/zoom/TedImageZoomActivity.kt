@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import gun0912.tedimagepicker.R
 import gun0912.tedimagepicker.databinding.ActivityZoomOutBinding
+import gun0912.tedimagepicker.util.Logger
 
 internal class TedImageZoomActivity : AppCompatActivity() {
     private lateinit var binding: ActivityZoomOutBinding
@@ -24,6 +25,8 @@ internal class TedImageZoomActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Logger.verbose("+")
+
         setSavedInstanceState(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_zoom_out)
 
@@ -37,6 +40,8 @@ internal class TedImageZoomActivity : AppCompatActivity() {
     }
 
     private fun loadImage(onLoadingFinished: () -> Unit) {
+        Logger.verbose("+")
+
         val listener = object : RequestListener<Drawable> {
             override fun onLoadFailed(
                 e: GlideException?,
@@ -67,6 +72,7 @@ internal class TedImageZoomActivity : AppCompatActivity() {
     }
 
     private fun setSavedInstanceState(savedInstanceState: Bundle?) {
+        Logger.verbose("+")
 
         val bundle: Bundle? = when {
             savedInstanceState != null -> savedInstanceState
@@ -77,6 +83,8 @@ internal class TedImageZoomActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        Logger.verbose("+")
+
         outState.putParcelable(EXTRA_URI, uri)
         super.onSaveInstanceState(outState)
     }

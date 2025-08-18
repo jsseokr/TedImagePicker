@@ -42,6 +42,7 @@ import gun0912.tedimagepicker.model.Album
 import gun0912.tedimagepicker.model.Media
 import gun0912.tedimagepicker.partialaccess.PartialAccessManageBottomSheet
 import gun0912.tedimagepicker.util.GalleryUtil
+import gun0912.tedimagepicker.util.Logger
 import gun0912.tedimagepicker.util.MediaUtil
 import gun0912.tedimagepicker.util.ToastUtil
 import gun0912.tedimagepicker.util.isPartialAccessGranted
@@ -71,6 +72,8 @@ internal class TedImagePickerActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Logger.verbose("+")
+
         setSavedInstanceState(savedInstanceState)
         if (Build.VERSION.SDK_INT != Build.VERSION_CODES.O) {
             requestedOrientation = builder.screenOrientation
@@ -91,12 +94,16 @@ internal class TedImagePickerActivity
     }
 
     private fun startAnimation() {
+        Logger.verbose("+")
+
         if (builder.startEnterAnim != null && builder.startExitAnim != null) {
             overridePendingTransition(builder.startEnterAnim!!, builder.startExitAnim!!)
         }
     }
 
     private fun setupToolbar() {
+        Logger.verbose("+")
+
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
@@ -108,6 +115,7 @@ internal class TedImagePickerActivity
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Logger.verbose("item = $item")
 
         return when (item.itemId) {
             android.R.id.home -> {
@@ -120,11 +128,15 @@ internal class TedImagePickerActivity
     }
 
     private fun setupTitle() {
+        Logger.verbose("+")
+
         val title = builder.title ?: getString(builder.titleResId)
         setTitle(title)
     }
 
     private fun setupButton() {
+        Logger.verbose("+")
+
         with(binding) {
             buttonGravity = builder.buttonGravity
             buttonText = builder.buttonText ?: getString(builder.buttonTextResId)
@@ -138,6 +150,8 @@ internal class TedImagePickerActivity
     }
 
     private fun setupButtonVisibility() {
+        Logger.verbose("+")
+
         binding.showButton = when {
             builder.selectType == SelectType.SINGLE -> false
             else -> mediaAdapter.selectedUriList.isNotEmpty()
@@ -145,6 +159,8 @@ internal class TedImagePickerActivity
     }
 
     private fun loadMedia(isRefresh: Boolean = false) {
+        Logger.verbose("isRefresh = $isRefresh")
+
         disposable = GalleryUtil.getMedia(this, builder.mediaType)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -163,6 +179,7 @@ internal class TedImagePickerActivity
         uriList?.forEach { uri: Uri -> onMultiMediaClick(uri) }
 
     private fun setSavedInstanceState(savedInstanceState: Bundle?) {
+        Logger.verbose("+")
 
         val bundle: Bundle? = when {
             savedInstanceState != null -> savedInstanceState
@@ -174,11 +191,15 @@ internal class TedImagePickerActivity
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        Logger.verbose("+")
+
         outState.putParcelable(EXTRA_BUILDER, builder)
         super.onSaveInstanceState(outState)
     }
 
     private fun setupRecyclerView() {
+        Logger.verbose("+")
+
         setupAlbumRecyclerView()
         setupMediaRecyclerView()
         setupSelectedMediaRecyclerView()
@@ -186,6 +207,7 @@ internal class TedImagePickerActivity
 
 
     private fun setupAlbumRecyclerView() {
+        Logger.verbose("+")
 
         val albumAdapter = albumAdapter.apply {
             onItemClickListener = object : BaseRecyclerViewAdapter.OnItemClickListener<Album> {
@@ -210,6 +232,8 @@ internal class TedImagePickerActivity
     }
 
     private fun setupMediaRecyclerView() {
+        Logger.verbose("+")
+
         mediaAdapter = MediaAdapter(this, builder).apply {
             onItemClickListener = object : BaseRecyclerViewAdapter.OnItemClickListener<Media> {
                 override fun onItemClick(data: Media, itemPosition: Int, layoutPosition: Int) {
@@ -258,6 +282,8 @@ internal class TedImagePickerActivity
     }
 
     private fun setupSelectedMediaRecyclerView() {
+        Logger.verbose("+")
+
         binding.layoutContent.selectType = builder.selectType
 
         selectedMediaAdapter = SelectedMediaAdapter().apply {
@@ -279,6 +305,8 @@ internal class TedImagePickerActivity
 
     @SuppressLint("CheckResult")
     private fun onCameraTileClick() {
+        Logger.verbose("+")
+
         val cameraMedia = when (builder.mediaType) {
             MediaType.IMAGE -> CameraMedia.IMAGE
             MediaType.VIDEO -> CameraMedia.VIDEO
@@ -306,6 +334,8 @@ internal class TedImagePickerActivity
 
 
     private fun onMediaClick(uri: Uri) {
+        Logger.verbose("uri = $uri")
+
         when (builder.selectType) {
             SelectType.SINGLE -> onSingleMediaClick(uri)
             SelectType.MULTI -> onMultiMediaClick(uri)
@@ -313,6 +343,8 @@ internal class TedImagePickerActivity
     }
 
     private fun onMultiMediaClick(uri: Uri) {
+        Logger.verbose("uri = $uri")
+
         mediaAdapter.toggleMediaSelect(uri)
         binding.layoutContent.items = mediaAdapter.selectedUriList
         updateSelectedMediaView()
@@ -320,6 +352,8 @@ internal class TedImagePickerActivity
     }
 
     private fun setupSelectedMediaView() {
+        Logger.verbose("+")
+
         binding.layoutContent.viewSelectedMedia.run {
             if (mediaAdapter.selectedUriList.size > 0) {
                 layoutParams.height =
@@ -332,6 +366,8 @@ internal class TedImagePickerActivity
     }
 
     private fun updateSelectedMediaView() {
+        Logger.verbose("+")
+
         binding.layoutContent.viewSelectedMedia.post {
             binding.layoutContent.viewSelectedMedia.run {
                 if (mediaAdapter.selectedUriList.size > 0) {
@@ -348,6 +384,8 @@ internal class TedImagePickerActivity
     }
 
     private fun slideView(view: View, currentHeight: Int, newHeight: Int) {
+        Logger.verbose("currentHeight = $currentHeight, newHeight = $newHeight")
+
         val valueAnimator = ValueAnimator.ofInt(currentHeight, newHeight).apply {
             addUpdateListener {
                 view.layoutParams.height = it.animatedValue as Int
@@ -362,6 +400,8 @@ internal class TedImagePickerActivity
     }
 
     private fun onSingleMediaClick(uri: Uri) {
+        Logger.verbose("uri = $uri")
+
         val data = Intent().apply {
             putExtra(EXTRA_SELECTED_URI, uri)
         }
@@ -371,17 +411,21 @@ internal class TedImagePickerActivity
 
     override fun finish() {
         super.finish()
+        Logger.verbose("+")
+
         finishAnimation()
     }
 
     private fun finishAnimation() {
+        Logger.verbose("+")
+
         if (builder.finishEnterAnim != null && builder.finishExitAnim != null) {
             overridePendingTransition(builder.finishEnterAnim!!, builder.finishExitAnim!!)
         }
     }
 
     private fun onMultiMediaDone() {
-
+        Logger.verbose("+")
 
         val selectedUriList = mediaAdapter.selectedUriList
         if (selectedUriList.size < builder.minCount) {
@@ -403,6 +447,8 @@ internal class TedImagePickerActivity
 
 
     private fun setSelectedAlbum(selectedPosition: Int) {
+        Logger.verbose("selectedPosition = $selectedPosition")
+
         val album = albumAdapter.getItem(selectedPosition)
         if (this.selectedPosition == selectedPosition && binding.selectedAlbum == album) {
             return
@@ -416,6 +462,8 @@ internal class TedImagePickerActivity
     }
 
     private fun setupListener() {
+        Logger.verbose("+")
+
         binding.viewSelectedAlbum.setOnClickListener {
             binding.drawerLayout.toggle()
         }
@@ -434,6 +482,8 @@ internal class TedImagePickerActivity
     }
 
     private fun setupAlbumType() {
+        Logger.verbose("+")
+
         if (builder.albumType == AlbumType.DRAWER) {
             binding.viewSelectedAlbumDropDown.visibility = View.GONE
         } else {
@@ -457,15 +507,21 @@ internal class TedImagePickerActivity
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     private fun showPartialAccessManageDialog() {
+        Logger.verbose("+")
+
         PartialAccessManageBottomSheet.show(this, builder.mediaType)
     }
 
     override fun onRefreshMedia() {
+        Logger.verbose("+")
+
         loadMedia(true)
         setupPartialAccessView()
     }
 
     override fun onBackPressed() {
+        Logger.verbose("+")
+
         if (isAlbumOpened()) {
             closeAlbum()
         } else {
@@ -482,6 +538,7 @@ internal class TedImagePickerActivity
         }
 
     private fun closeAlbum() {
+        Logger.verbose("+")
 
         if (builder.albumType == AlbumType.DRAWER) {
             binding.drawerLayout.close()
@@ -491,6 +548,8 @@ internal class TedImagePickerActivity
     }
 
     override fun onDestroy() {
+        Logger.verbose("+")
+
         if (!disposable.isDisposed) {
             disposable.dispose()
         }

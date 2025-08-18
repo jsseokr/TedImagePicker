@@ -24,6 +24,8 @@ internal class MediaUtil {
             cameraMedia: CameraMedia,
             savedDirectoryName: String?
         ): Pair<Intent, Uri> {
+            Logger.verbose("+")
+
             val cameraIntent =  Intent(cameraMedia.intentAction)
 
             if (cameraIntent.resolveActivity(context.packageManager) == null) {
@@ -39,6 +41,8 @@ internal class MediaUtil {
             cameraMedia: CameraMedia,
             savedDirectoryName: String?
         ): Pair<Intent, Uri> {
+            Logger.verbose("+")
+
             val timeStamp =
                 SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(Date())
             val fileName = "${cameraMedia}_$timeStamp"
@@ -93,6 +97,7 @@ internal class MediaUtil {
         }
 
         fun scanMedia(context: Context, uri: Uri): Completable {
+            Logger.verbose("uri = $uri")
 
             return Completable.create { emitter ->
                 MediaScannerConnection.scanFile(context, arrayOf(uri.path), null)

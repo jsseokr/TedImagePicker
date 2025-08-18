@@ -16,6 +16,7 @@ import com.tedpark.tedonactivityresult.rx2.TedRxOnActivityResult
 import gun0912.tedimagepicker.R
 import gun0912.tedimagepicker.builder.type.MediaType
 import gun0912.tedimagepicker.databinding.BottomsheetPartialAccessManageBinding
+import gun0912.tedimagepicker.util.Logger
 import gun0912.tedimagepicker.util.isFullOrPartialAccessGranted
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
@@ -27,6 +28,8 @@ class PartialAccessManageBottomSheet : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Logger.verbose("+")
+
         mediaType = requireArguments().getParcelable(ARGUMENT_MEDIA_TYPE) ?: MediaType.IMAGE
     }
 
@@ -40,11 +43,15 @@ class PartialAccessManageBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Logger.verbose("+")
+
         setupText()
         setupListener()
     }
 
     private fun setupText() = with(binding) {
+        Logger.verbose("+")
+
         val mediaText = getString(mediaType.nameResId)
 
         tvSelectMorePhotoVideo.text =
@@ -54,17 +61,23 @@ class PartialAccessManageBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun setupListener() {
+        Logger.verbose("+")
+
         binding.tvCancel.setOnClickListener { dismiss() }
         binding.tvSelectMorePhotoVideo.setOnClickListener { selectMoreImageVideo() }
         binding.tvGrantFullAccessPhotoVideo.setOnClickListener { grantFullAccess() }
     }
 
     private fun selectMoreImageVideo() {
+        Logger.verbose("+")
+
         requestPermission()
     }
 
     @SuppressLint("CheckResult")
     private fun grantFullAccess() {
+        Logger.verbose("+")
+
         val canRequestPermission =
             TedPermissionUtil.canRequestPermission(requireActivity(), *mediaType.permissions)
         if (canRequestPermission) {
@@ -84,6 +97,8 @@ class PartialAccessManageBottomSheet : BottomSheetDialogFragment() {
 
     @SuppressLint("CheckResult")
     private fun requestPermission() {
+        Logger.verbose("+")
+
         TedPermission.create()
             .setPermissions(*mediaType.permissions)
             .request()
@@ -95,6 +110,8 @@ class PartialAccessManageBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun actionComplete() {
+        Logger.verbose("+")
+
         (activity as? Listener)?.onRefreshMedia()
         dismiss()
     }
@@ -108,6 +125,8 @@ class PartialAccessManageBottomSheet : BottomSheetDialogFragment() {
         private val TAG = this::class.java.simpleName
 
         fun show(activity: FragmentActivity, mediaType: MediaType) {
+            Logger.verbose("mediaType = $mediaType")
+
             PartialAccessManageBottomSheet().apply {
                 arguments = bundleOf(ARGUMENT_MEDIA_TYPE to mediaType)
             }.show(activity.supportFragmentManager, TAG)

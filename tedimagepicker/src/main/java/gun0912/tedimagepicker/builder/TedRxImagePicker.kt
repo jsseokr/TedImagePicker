@@ -7,6 +7,7 @@ import gun0912.tedimagepicker.builder.listener.OnErrorListener
 import gun0912.tedimagepicker.builder.listener.OnMultiSelectedListener
 import gun0912.tedimagepicker.builder.listener.OnSelectedListener
 import gun0912.tedimagepicker.builder.type.SelectType
+import gun0912.tedimagepicker.util.Logger
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import java.lang.ref.WeakReference
@@ -24,8 +25,12 @@ class TedRxImagePicker {
 
         fun start(): Single<Uri> =
             Single.create { emitter ->
+                Logger.verbose("+")
+
                 this.onSelectedListener = object : OnSelectedListener {
                     override fun onSelected(uri: Uri) {
+                        Logger.verbose("uri = $uri")
+
                         emitter.onSuccess(uri)
                     }
                 }
@@ -35,8 +40,12 @@ class TedRxImagePicker {
 
         fun startMultiImage(): Single<List<Uri>> =
             Single.create { emitter ->
+                Logger.verbose("+")
+
                 this.onMultiSelectedListener = object : OnMultiSelectedListener {
                     override fun onSelected(uriList: List<Uri>) {
+                        Logger.verbose("uriList = $uriList")
+
                         emitter.onSuccess(uriList)
                     }
                 }
@@ -44,8 +53,12 @@ class TedRxImagePicker {
             }
 
         private fun start(selectType: SelectType, emitter: SingleEmitter<*>) {
+            Logger.verbose("+")
+
             this.onErrorListener = object : OnErrorListener {
                 override fun onError(throwable: Throwable) {
+                    Logger.verbose("throwable = ${throwable.localizedMessage}")
+
                     emitter.onError(throwable)
                 }
             }

@@ -14,6 +14,7 @@ import gun0912.tedimagepicker.builder.type.MediaType
 import gun0912.tedimagepicker.databinding.ItemGalleryCameraBinding
 import gun0912.tedimagepicker.databinding.ItemGalleryMediaBinding
 import gun0912.tedimagepicker.model.Media
+import gun0912.tedimagepicker.util.Logger
 import gun0912.tedimagepicker.util.ToastUtil
 import gun0912.tedimagepicker.zoom.TedImageZoomActivity
 import java.text.SimpleDateFormat
@@ -38,6 +39,8 @@ internal class MediaAdapter(
     override fun getItemViewHolder(parent: ViewGroup) = ImageViewHolder(parent)
 
     fun toggleMediaSelect(uri: Uri) {
+        Logger.verbose("uri = $uri")
+
         if (selectedUriList.contains(uri)) {
             removeMedia(uri)
         } else {
@@ -47,6 +50,8 @@ internal class MediaAdapter(
 
 
     private fun addMedia(uri: Uri) {
+        Logger.verbose("uri = $uri")
+
         if (selectedUriList.size == builder.maxCount) {
             val message =
                 builder.maxCountMessage ?: activity.getString(builder.maxCountMessageResId)
@@ -63,6 +68,8 @@ internal class MediaAdapter(
 
 
     private fun removeMedia(uri: Uri) {
+        Logger.verbose("uri = $uri")
+
         val position = getViewPosition(uri)
         selectedUriList.remove(uri)
         notifyItemChanged(position)
@@ -70,6 +77,8 @@ internal class MediaAdapter(
     }
 
     private fun refreshSelectedView() {
+        Logger.verbose("+")
+
         selectedUriList.forEach {
             val position: Int = getViewPosition(it)
             notifyItemChanged(position)
@@ -93,6 +102,8 @@ internal class MediaAdapter(
         }
 
         override fun bind(data: Media) {
+            Logger.verbose("+")
+
             binding.run {
                 media = data
                 isSelected = selectedUriList.contains(data.uri)
@@ -110,6 +121,8 @@ internal class MediaAdapter(
         }
 
         override fun recycled() {
+            Logger.verbose("+")
+
             if (activity.isDestroyed) {
                 return
             }
@@ -117,6 +130,8 @@ internal class MediaAdapter(
         }
 
         private fun startZoomActivity(media: Media) {
+            Logger.verbose("media = $media")
+
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 activity,
                 binding.ivImage,

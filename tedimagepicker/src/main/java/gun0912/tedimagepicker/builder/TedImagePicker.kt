@@ -8,6 +8,7 @@ import gun0912.tedimagepicker.builder.listener.ImageSelectCancelListener
 import gun0912.tedimagepicker.builder.listener.OnMultiSelectedListener
 import gun0912.tedimagepicker.builder.listener.OnSelectedListener
 import gun0912.tedimagepicker.builder.type.SelectType
+import gun0912.tedimagepicker.util.Logger
 import java.lang.ref.WeakReference
 
 
@@ -21,13 +22,16 @@ class TedImagePicker {
     class Builder(private val contextWeakReference: WeakReference<Context>) :
         TedImagePickerBaseBuilder<Builder>() {
 
-
         fun errorListener(onErrorListener: OnErrorListener): Builder {
+            Logger.verbose("+")
+
             this.onErrorListener = onErrorListener
             return this
         }
 
         fun errorListener(action: (Throwable) -> Unit): Builder {
+            Logger.verbose("+")
+
             this.onErrorListener = object : OnErrorListener {
                 override fun onError(throwable: Throwable) {
                     action(throwable)
@@ -37,6 +41,8 @@ class TedImagePicker {
         }
 
         fun cancelListener(imageSelectCancelListener: ImageSelectCancelListener): Builder {
+            Logger.verbose("+")
+
             this.imageSelectCancelListener = imageSelectCancelListener
             return this
         }
@@ -44,12 +50,16 @@ class TedImagePicker {
         fun cancelListener(action: () -> Unit): Builder =
             cancelListener(object : ImageSelectCancelListener {
                 override fun onImageSelectCancel() {
+                    Logger.verbose("+")
+
                     action.invoke()
                 }
             })
 
 
         fun start(onSelectedListener: OnSelectedListener) {
+            Logger.verbose("+")
+
             this.onSelectedListener = onSelectedListener
             selectType = SelectType.SINGLE
             contextWeakReference.get()?.let {
@@ -59,6 +69,8 @@ class TedImagePicker {
         }
 
         fun start(action: (Uri) -> Unit) {
+            Logger.verbose("+")
+
             start(object : OnSelectedListener {
                 override fun onSelected(uri: Uri) {
                     action(uri)
@@ -67,6 +79,8 @@ class TedImagePicker {
         }
 
         fun startMultiImage(action: (List<Uri>) -> Unit) {
+            Logger.verbose("+")
+
             startMultiImage(object : OnMultiSelectedListener {
                 override fun onSelected(uriList: List<Uri>) {
                     action(uriList)
@@ -75,6 +89,8 @@ class TedImagePicker {
         }
 
         fun startMultiImage(onMultiSelectedListener: OnMultiSelectedListener) {
+            Logger.verbose("+")
+
             this.onMultiSelectedListener = onMultiSelectedListener
             selectType = SelectType.MULTI
             contextWeakReference.get()?.let {

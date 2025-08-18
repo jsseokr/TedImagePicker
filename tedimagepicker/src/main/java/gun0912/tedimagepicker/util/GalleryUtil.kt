@@ -23,6 +23,8 @@ internal class GalleryUtil {
         private const val INDEX_DURATION = MediaStore.MediaColumns.DURATION
 
         internal fun getMedia(context: Context, mediaType: MediaType): Single<List<Album>> {
+            Logger.verbose("mediaType = $mediaType")
+
             return Single.create { emitter ->
                 try {
 
@@ -66,6 +68,8 @@ internal class GalleryUtil {
         }
 
         private fun getAllMediaList(context: Context, queryMediaType: QueryMediaType): List<Media> {
+            Logger.verbose("queryMediaType = $queryMediaType")
+
             val sortOrder = "$INDEX_DATE_ADDED DESC"
 
             val projection = mutableListOf(

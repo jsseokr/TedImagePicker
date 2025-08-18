@@ -3,6 +3,7 @@ package gun0912.tedimagepicker.base
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
+import gun0912.tedimagepicker.util.Logger
 
 internal abstract class BaseSimpleHeaderAdapter<D>(protected val headerCount: Int = HEADER_COUNT) :
     BaseRecyclerViewAdapter<D, BaseViewHolder<ViewDataBinding, D>>(headerCount) {
@@ -15,6 +16,8 @@ internal abstract class BaseSimpleHeaderAdapter<D>(protected val headerCount: In
         parent: ViewGroup,
         viewType: ViewType
     ): BaseViewHolder<*, D> {
+        Logger.verbose("viewType = $viewType")
+
         return when (viewType) {
             ViewType.HEADER -> getHeaderViewHolder(parent)
             ViewType.ITEM -> getItemViewHolder(parent)

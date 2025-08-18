@@ -1,6 +1,8 @@
 package gun0912.tedimagepicker.builder
 
 import android.Manifest
+import android.R.attr.orientation
+import android.R.attr.value
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -26,6 +28,7 @@ import gun0912.tedimagepicker.builder.type.AlbumType
 import gun0912.tedimagepicker.builder.type.ButtonGravity
 import gun0912.tedimagepicker.builder.type.MediaType
 import gun0912.tedimagepicker.builder.type.SelectType
+import gun0912.tedimagepicker.util.Logger
 import gun0912.tedimagepicker.util.ToastUtil
 import gun0912.tedimagepicker.util.isPartialAccessGranted
 import kotlinx.parcelize.IgnoredOnParcel
@@ -97,6 +100,8 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
 
     @SuppressLint("CheckResult")
     protected fun startInternal(context: Context) {
+        Logger.verbose("+")
+
         val requestPermissions = getRequestPermissions()
         if (TedPermissionUtil.isGranted(*requestPermissions) || mediaType.isPartialAccessGranted) {
             startActivity(context)
@@ -113,6 +118,8 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
     }
 
     private fun getRequestPermissions(): Array<String> {
+        Logger.verbose("+")
+
         val permissions = mediaType.permissions.toMutableList()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             permissions.add(Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED)
@@ -121,6 +128,8 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
     }
 
     private fun startActivity(context: Context) {
+        Logger.verbose("+")
+
         TedImagePickerActivity.getIntent(context, this)
             .run {
                 TedRxOnActivityResult.with(context).startActivityForResult(this)
@@ -136,6 +145,8 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
     }
 
     private fun onComplete(data: Intent) {
+        Logger.verbose("+")
+
         val selectedUri =
             TedImagePickerActivity.getSelectedUri(data)
         val selectedUriList =
@@ -148,6 +159,8 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
     }
 
     fun mediaType(mediaType: MediaType): B {
+        Logger.verbose("+")
+
         this.mediaType = mediaType
         return this as B
     }
@@ -159,66 +172,92 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
     fun imageAndVideo(): B = mediaType(MediaType.IMAGE_AND_VIDEO)
 
     fun cameraTileBackground(@ColorRes cameraTileBackgroundResId: Int): B {
+        Logger.verbose("cameraTileBackgroundResId = $cameraTileBackgroundResId")
+
         this.cameraTileBackgroundResId = cameraTileBackgroundResId
         return this as B
     }
 
     fun cameraTileImage(@DrawableRes cameraTileImage: Int): B {
+        Logger.verbose("cameraTileImage = $cameraTileImage")
+
         this.cameraTileImageResId = cameraTileImage
         return this as B
     }
 
     fun showCameraTile(show: Boolean): B {
+        Logger.verbose("show = $show")
+
         this.showCameraTile = show
         return this as B
     }
 
     fun scrollIndicatorDateFormat(formatString: String): B {
+        Logger.verbose("formatString = $formatString")
+
         this.scrollIndicatorDateFormat = formatString
         return this as B
     }
 
     fun showTitle(show: Boolean): B {
+        Logger.verbose("show = $show")
+
         this.showTitle = show
         return this as B
     }
 
     fun title(text: String): B {
+        Logger.verbose("title = $title")
+
         this.title = text
         return this as B
     }
 
     fun title(@StringRes textResId: Int): B {
+        Logger.verbose("textResId = $textResId")
+
         this.titleResId = textResId
         return this as B
     }
 
     fun savedDirectoryName(savedDirectoryName: String): B {
+        Logger.verbose("savedDirectoryName = $savedDirectoryName")
+
         this.savedDirectoryName = savedDirectoryName
         return this as B
     }
 
     fun buttonGravity(buttonGravity: ButtonGravity): B {
+        Logger.verbose("+")
+
         this.buttonGravity = buttonGravity
         return this as B
     }
 
     fun buttonText(text: String): B {
+        Logger.verbose("text = $text")
+
         this.buttonText = text
         return this as B
     }
 
     fun buttonText(@StringRes textResId: Int): B {
+        Logger.verbose("textResId = $textResId")
+
         this.buttonTextResId = textResId
         return this as B
     }
 
     fun buttonBackground(@DrawableRes buttonBackgroundResId: Int): B {
+        Logger.verbose("buttonBackgroundResId = $buttonBackgroundResId")
+
         this.buttonBackgroundResId = buttonBackgroundResId
         return this as B
     }
 
     fun buttonTextColor(@ColorRes buttonTextColorResId: Int): B {
+        Logger.verbose("buttonTextColorResId = $buttonTextColorResId")
+
         this.buttonTextColorResId = buttonTextColorResId
         return this as B
     }
@@ -226,50 +265,68 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
     fun buttonDrawableOnly() = buttonDrawableOnly(true)
 
     fun buttonDrawableOnly(value: Boolean): B {
+        Logger.verbose("value = $value")
+
         buttonDrawableOnly = value
         return this as B
     }
 
     fun selectedUri(uriList: List<Uri>?): B {
+        Logger.verbose("uriList = $uriList")
+
         this.selectedUriList = uriList
         return this as B
     }
 
     fun backButton(@DrawableRes backButtonResId: Int): B {
+        Logger.verbose("+")
+
         this.backButtonResId = backButtonResId
         return this as B
     }
 
     fun max(maxCount: Int, maxCountMessage: String): B {
+        Logger.verbose("maxCount = $maxCount")
+
         this.maxCount = maxCount
         this.maxCountMessage = maxCountMessage
         return this as B
     }
 
     fun max(maxCount: Int, @StringRes maxCountMessageResId: Int): B {
+        Logger.verbose("maxCount = $maxCount")
+
         this.maxCount = maxCount
         this.maxCountMessageResId = maxCountMessageResId
         return this as B
     }
 
     fun min(minCount: Int, minCountMessage: String): B {
+        Logger.verbose("minCount = $minCount")
+
         this.minCount = minCount
         this.minCountMessage = minCountMessage
         return this as B
     }
 
     fun min(minCount: Int, @StringRes minCountMessageResId: Int): B {
+        Logger.verbose("minCount = $minCount")
+
         this.minCount = minCount
         this.minCountMessageResId = minCountMessageResId
         return this as B
     }
 
     fun zoomIndicator(show: Boolean): B {
+        Logger.verbose("show = $show")
+
         this.showZoomIndicator = show
         return this as B
     }
 
     fun albumType(albumType: AlbumType): B {
+        Logger.verbose("albumType = $albumType")
+
         this.albumType = albumType
         if (albumType == AlbumType.DROP_DOWN) {
             showTitle(false)
@@ -278,14 +335,20 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
     }
 
     fun drawerAlbum(): B {
+        Logger.verbose("+")
+
         return albumType(AlbumType.DRAWER)
     }
 
     fun dropDownAlbum(): B {
+        Logger.verbose("+")
+
         return albumType(AlbumType.DROP_DOWN)
     }
 
     fun imageCountTextFormat(formatText: String): B {
+        Logger.verbose("formatText = $formatText")
+
         this.imageCountFormat = formatText
         return this as B
     }
@@ -308,10 +371,14 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
     }
 
     fun screenOrientation(orientation: Int) {
+        Logger.verbose("orientation = $orientation")
+
         this.screenOrientation = orientation
     }
 
     fun showVideoDuration(show: Boolean): B {
+        Logger.verbose("show = $show")
+
         this.showVideoDuration = show
         return this as B
     }

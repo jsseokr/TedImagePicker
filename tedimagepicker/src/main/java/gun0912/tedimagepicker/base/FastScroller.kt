@@ -15,6 +15,7 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import gun0912.tedimagepicker.databinding.LayoutScrollerBinding
+import gun0912.tedimagepicker.util.Logger
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -51,6 +52,8 @@ class FastScroller @JvmOverloads constructor(
     }
 
     private fun init() {
+        Logger.verbose("+")
+
         orientation = HORIZONTAL
         clipChildren = false
         binding = LayoutScrollerBinding.inflate(LayoutInflater.from(context), this, true)
@@ -59,6 +62,8 @@ class FastScroller @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        Logger.verbose("+")
+
         return when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 if (isTouchScroller(event)) {
@@ -90,6 +95,8 @@ class FastScroller @JvmOverloads constructor(
     }
 
     private fun isTouchScroller(event: MotionEvent): Boolean {
+        Logger.verbose("+")
+
         val scrollerRect = Rect().apply {
             binding.viewScroller.getHitRect(this)
         }
@@ -98,11 +105,15 @@ class FastScroller @JvmOverloads constructor(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        Logger.verbose("+")
+
         viewHeight = h
     }
 
 
     private fun setupHideScrollerSubscribe() {
+        Logger.verbose("+")
+
         hideDisposable = hideScrollerSubject.debounce(HIDE_DELAY_SECOND, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -114,6 +125,8 @@ class FastScroller @JvmOverloads constructor(
 
 
     private fun showScroller(event: MotionEvent) {
+        Logger.verbose("+")
+
         currentAnimator?.cancel()
 
         setScrollerPosition(event.y)
@@ -122,6 +135,8 @@ class FastScroller @JvmOverloads constructor(
 
 
     private fun setScrollerPosition(positionY: Float) {
+        Logger.verbose("+")
+
         binding.viewScroller.y = getValueInRange(
             positionY - (binding.viewScroller.height / 2),
             viewHeight - binding.viewScroller.height
@@ -134,6 +149,8 @@ class FastScroller @JvmOverloads constructor(
     }
 
     private fun setRecyclerViewPosition(positionY: Float) {
+        Logger.verbose("+")
+
         recyclerView?.adapter?.run {
             val proportion: Float = when {
                 binding.viewScroller.y == 0f -> 0f
@@ -153,6 +170,8 @@ class FastScroller @JvmOverloads constructor(
     private fun getValueInRange(value: Float, max: Int): Float = value.coerceIn(0f, max.toFloat())
 
     private fun showAnimateHandle() {
+        Logger.verbose("+")
+
         if (binding.viewScroller.visibility == View.VISIBLE) {
             return
         }
@@ -170,6 +189,8 @@ class FastScroller @JvmOverloads constructor(
 
 
     private fun hideAnimateHandle() {
+        Logger.verbose("+")
+
         if (binding.viewScroller.visibility == View.INVISIBLE) {
             return
         }
@@ -202,6 +223,8 @@ class FastScroller @JvmOverloads constructor(
 
 
     private fun showBubble() {
+        Logger.verbose("+")
+
         if (binding.viewBubble.visibility == View.VISIBLE) {
             return
         }
@@ -217,6 +240,8 @@ class FastScroller @JvmOverloads constructor(
     }
 
     private fun hideBubble() {
+        Logger.verbose("+")
+
         if (binding.viewBubble.visibility == View.INVISIBLE) {
             return
         }
@@ -244,6 +269,8 @@ class FastScroller @JvmOverloads constructor(
     }
 
     override fun onDetachedFromWindow() {
+        Logger.verbose("+")
+
         recyclerView?.removeOnScrollListener(scrollListener)
         hideDisposable?.dispose()
         super.onDetachedFromWindow()
@@ -251,6 +278,8 @@ class FastScroller @JvmOverloads constructor(
 
     private inner class ScrollListener : RecyclerView.OnScrollListener() {
         override fun onScrolled(rv: RecyclerView, dx: Int, dy: Int) {
+            Logger.verbose("+")
+
             if (dy == 0) {
                 return
             }
@@ -269,6 +298,8 @@ class FastScroller @JvmOverloads constructor(
 
 
     private fun updateBubbleAndHandlePosition() {
+        Logger.verbose("+")
+
         if (binding.viewScroller.isSelected) {
             return
         }
@@ -283,6 +314,8 @@ class FastScroller @JvmOverloads constructor(
     }
 
     fun setBubbleText(text: String) {
+        Logger.verbose("text = $text")
+
         binding.tvBubble.text = text
     }
 

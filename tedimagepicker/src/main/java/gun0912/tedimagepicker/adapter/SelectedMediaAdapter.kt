@@ -1,5 +1,6 @@
 package gun0912.tedimagepicker.adapter
 
+import android.R.attr.data
 import android.app.Activity
 import android.net.Uri
 import android.util.Log
@@ -11,6 +12,7 @@ import gun0912.tedimagepicker.R
 import gun0912.tedimagepicker.base.BaseRecyclerViewAdapter
 import gun0912.tedimagepicker.base.BaseViewHolder
 import gun0912.tedimagepicker.databinding.ItemSelectedMediaBinding
+import gun0912.tedimagepicker.util.Logger
 
 internal class SelectedMediaAdapter :
     BaseRecyclerViewAdapter<Uri, SelectedMediaAdapter.MediaViewHolder>() {
@@ -22,6 +24,8 @@ internal class SelectedMediaAdapter :
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
+        Logger.verbose("+")
+
         layoutManager = recyclerView.layoutManager
     }
 
@@ -38,10 +42,14 @@ internal class SelectedMediaAdapter :
         }
 
         override fun bind(data: Uri) {
+            Logger.verbose("data = $data")
+
             binding.uri = data
         }
 
         override fun recycled() {
+            Logger.verbose("+")
+
             if ((itemView.context as? Activity)?.isDestroyed == true) {
                 return
             }

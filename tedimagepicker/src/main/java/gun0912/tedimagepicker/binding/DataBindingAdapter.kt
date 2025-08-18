@@ -7,6 +7,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import gun0912.tedimagepicker.base.BaseRecyclerViewAdapter
+import gun0912.tedimagepicker.util.Logger
 
 internal class DataBindingAdapter {
 
@@ -14,6 +15,8 @@ internal class DataBindingAdapter {
         @BindingAdapter("imageUri")
         @JvmStatic
         fun loadImage(imageView: ImageView, uri: Uri) {
+            Logger.verbose("uri = $uri")
+
             Glide.with(imageView.context)
                 .load(uri)
                 .thumbnail(0.1f)
@@ -25,6 +28,8 @@ internal class DataBindingAdapter {
         @BindingAdapter("replaceAll")
         @JvmStatic
         fun <D> replaceAll(recyclerView: RecyclerView, items: List<D>?) {
+            Logger.verbose("+")
+
             items?.let { (recyclerView.adapter as? BaseRecyclerViewAdapter<D, *>)?.replaceAll(it) }
         }
 
@@ -32,6 +37,8 @@ internal class DataBindingAdapter {
         @BindingAdapter("replaceAll", "diffCallback")
         @JvmStatic
         fun <D> replaceAll(recyclerView: RecyclerView, items: List<D>?, diffCallback: Boolean) {
+            Logger.verbose("+")
+
             items?.let {
                 (recyclerView.adapter as? BaseRecyclerViewAdapter<D, *>)?.replaceAll(
                     it,
@@ -45,6 +52,8 @@ internal class DataBindingAdapter {
         @BindingAdapter("animateTranslationY")
         @JvmStatic
         fun animateTranslationY(view: View, show: Boolean) {
+            Logger.verbose("+")
+
             val animateValue = when (show) {
                 true -> -view.y / 2
                 false -> 0f
@@ -55,6 +64,8 @@ internal class DataBindingAdapter {
         @BindingAdapter("src")
         @JvmStatic
         fun setImageViewResource(imageView: ImageView, resId: Int?) {
+            Logger.verbose("+")
+
             try {
                 resId?.let { imageView.setImageResource(it) }
             } catch (e: Exception) {
@@ -66,6 +77,8 @@ internal class DataBindingAdapter {
         @BindingAdapter("background")
         @JvmStatic
         fun setBackgroundResource(view: View, resId: Int?) {
+            Logger.verbose("+")
+
             try {
                 resId?.let { view.setBackgroundResource(it) }
             } catch (e: Exception) {
