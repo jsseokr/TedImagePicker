@@ -3,6 +3,7 @@ package gun0912.tedimagepicker.ui
 
 
 import android.net.Uri
+import android.util.Log.v
 
 import android.view.LayoutInflater
 
@@ -130,16 +131,9 @@ internal class PreviewPagerAdapter(
                 else -> {
 
                     ssiv.visibility = View.VISIBLE
-//                    ssiv.setImageDrawable(ImageSource.uri(uri))
-//                    ssiv.setImage(ImageSource.uri(uri))
-
-                    Glide.with(this)
+                    Glide.with(ctx)
                         .load(uri)
-//            .centerCrop()
-//            .apply(RequestOptions().fitCenter())
-//            .apply(RequestOptions().dontTransform())
-//            .listener(listener)
-                        .into(binding.ivMedia)
+                        .into(ssiv)
                 }
 
             }
