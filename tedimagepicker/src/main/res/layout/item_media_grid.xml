@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent" android:layout_height="120dp" android:padding="2dp">
+
+
+
+    <ImageView
+
+        android:id="@+id/ivThumb"
+
+        android:layout_width="match_parent" android:layout_height="match_parent"
+
+        android:scaleType="centerCrop"/>
+
+
+
+    <TextView
+
+        android:id="@+id/badgeGif"
+
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+        android:text="GIF" android:textColor="#FFF" android:textStyle="bold"
+
+        android:background="#99000000" android:padding="4dp"
+
+        android:layout_gravity="bottom|start" android:visibility="gone"/>
+
+
+
+    <TextView
+
+        android:id="@+id/badgeVideo"
+
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+        android:text="VIDEO" android:textColor="#FFF" android:textStyle="bold"
+
+        android:background="#99000000" android:padding="4dp"
+
+        android:layout_gravity="bottom|end" android:visibility="gone"/>
+
+
+
+    <!-- 선택 오버레이 -->
+
+    <View
+
+        android:id="@+id/viewCheck"
+
+        android:layout_width="match_parent" android:layout_height="match_parent"
+
+        android:background="#6600A000" android:visibility="gone"/>
+
+</FrameLayout>
