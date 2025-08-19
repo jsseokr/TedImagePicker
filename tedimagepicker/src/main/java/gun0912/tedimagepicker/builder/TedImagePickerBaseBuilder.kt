@@ -24,6 +24,7 @@ import gun0912.tedimagepicker.TedPreViewActivity
 import gun0912.tedimagepicker.builder.listener.ImageSelectCancelListener
 import gun0912.tedimagepicker.builder.listener.OnErrorListener
 import gun0912.tedimagepicker.builder.listener.OnMultiSelectedListener
+import gun0912.tedimagepicker.builder.listener.OnPreviewResultListener
 import gun0912.tedimagepicker.builder.listener.OnSelectedListener
 import gun0912.tedimagepicker.builder.type.AlbumType
 import gun0912.tedimagepicker.builder.type.ButtonGravity
@@ -99,6 +100,9 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
     @IgnoredOnParcel
     protected var imageSelectCancelListener: ImageSelectCancelListener? = null
 
+    @IgnoredOnParcel
+    protected var onPreviewResultListener: OnPreviewResultListener? = null
+
     @SuppressLint("CheckResult")
     protected fun startInternal(context: Context) {
         Logger.verbose("+")
@@ -159,6 +163,21 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
         }
     }
 
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Logger.verbose("+")
+        
+        when (requestCode) {
+            PREVIEW_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    val selectedUriList = data.getParcelableArrayListExtra<Uri>(TedPreViewActivity.EXTRA_SELECTED_URI_LIST)
+                    selectedUriList?.let { uriList ->
+                        onPreviewResultListener?.onPreviewResult(uriList)
+                    }
+                }
+            }
+        }
+    }
+
     fun mediaType(mediaType: MediaType): B {
         Logger.verbose("+")
 
@@ -180,7 +199,28 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
         Logger.verbose("+")
         
         val intent = TedPreViewActivity.getIntent(context, mediaUriList, selectedUriList)
-        context.startActivity(intent)
+        
+        if (context is Activity) {
+            context.startActivityForResult(intent, PREVIEW_REQUEST_CODE)
+        } else {
+            context.startActivity(intent)
+        }
+    }
+
+    fun previewResultListener(listener: OnPreviewResultListener): B {
+        Logger.verbose("+")
+        this.onPreviewResultListener = listener
+        return this as B
+    }
+
+    fun previewResultListener(action: (List<Uri>) -> Unit): B {
+        Logger.verbose("+")
+        this.onPreviewResultListener = object : OnPreviewResultListener {
+            override fun onPreviewResult(selectedUriList: List<Uri>) {
+                action(selectedUriList)
+            }
+        }
+        return this as B
     }
 
     fun cameraTileBackground(@ColorRes cameraTileBackgroundResId: Int): B {
@@ -393,6 +433,10 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
 
         this.showVideoDuration = show
         return this as B
+    }
+
+    companion object {
+        const val PREVIEW_REQUEST_CODE = 1001
     }
 
 }

@@ -133,26 +133,58 @@ TedRxImagePicker.with(this)
 - Swipe left/right to navigate
 - Show selection status
 - Auto-detect media type
+- **Selection changes are automatically applied**
 
 ```kotlin
 // Preview all media with current selection
 val allMediaUris = listOf(uri1, uri2, uri3, ...)
 val selectedUris = listOf(uri1, uri3)
 
+// Basic preview
 TedImagePicker.with(this)
+    .preview(allMediaUris, selectedUris)
+
+// Preview with result callback
+TedImagePicker.with(this)
+    .previewResultListener { updatedSelectedUris ->
+        // Handle updated selection
+        selectedUris = updatedSelectedUris
+        updateUI()
+    }
     .preview(allMediaUris, selectedUris)
 
 // Or use RxJava style
 TedRxImagePicker.with(this)
+    .previewResultListener { updatedSelectedUris ->
+        // Handle updated selection
+        selectedUris = updatedSelectedUris
+        updateUI()
+    }
     .preview(allMediaUris, selectedUris)
 ```
 
 ```java
 // Java
 TedImagePicker.with(this)
+    .previewResultListener(new OnPreviewResultListener() {
+        @Override
+        public void onPreviewResult(List<Uri> updatedSelectedUris) {
+            // Handle updated selection
+            selectedUris = updatedSelectedUris;
+            updateUI();
+        }
+    })
     .preview(allMediaUris, selectedUris);
 
 TedRxImagePicker.with(this)
+    .previewResultListener(new OnPreviewResultListener() {
+        @Override
+        public void onPreviewResult(List<Uri> updatedSelectedUris) {
+            // Handle updated selection
+            selectedUris = updatedSelectedUris;
+            updateUI();
+        }
+    })
     .preview(allMediaUris, selectedUris);
 ```
 
@@ -164,6 +196,9 @@ TedRxImagePicker.with(this)
 - **Selection Toggle**: Tap selection icon to toggle selection
 - **Navigation**: Swipe left/right or use position indicator
 - **Lifecycle Management**: Automatically pauses/resumes video playback
+- **Real-time Updates**: Selection changes are immediately reflected in the UI
+- **Result Callback**: Get notified when selection changes via `previewResultListener`
+- **State Persistence**: Selection state is maintained during navigation
 
 ### 4.More configuration
 
@@ -187,6 +222,7 @@ TedImagePicker.with(this)
 - **Media Types**: Image, Video, Image & Video
 - **Selection Modes**: Single, Multi
 - **Preview**: Full-screen preview with ViewPager2
+- **Selection Management**: Real-time selection updates with callbacks
 - **Camera Integration**: Built-in camera support
 - **Permissions**: Automatic permission handling
 - **RxJava Support**: Reactive programming support

@@ -15,9 +15,10 @@ import gun0912.tedimagepicker.util.Logger
 internal class TedPreViewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPreviewBinding
     private lateinit var mediaUriList: List<Uri>
-    private lateinit var selectedUriList: List<Uri>
+    private var selectedUriList: MutableList<Uri> = mutableListOf()
     private lateinit var adapter: PreviewMediaAdapter
     private var currentPosition = 0
+    private var hasSelectionChanged = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,13 +35,23 @@ internal class TedPreViewActivity : AppCompatActivity() {
     private fun setupViews() {
         // 뒤로가기 버튼
         binding.btnBack.setOnClickListener {
-            finish()
+            finishWithResult()
         }
 
         // 선택 상태 토글
         binding.ivSelectionStatus.setOnClickListener {
             toggleSelection()
         }
+    }
+
+    private fun finishWithResult() {
+        // 선택 상태 변경이 있었는지 확인하고 결과 반환
+        if (hasSelectionChanged) {
+            setResult(RESULT_OK, Intent().apply {
+                putParcelableArrayListExtra(EXTRA_SELECTED_URI_LIST, ArrayList(selectedUriList))
+            })
+        }
+        finish()
     }
 
     private fun setupViewPager() {
@@ -90,19 +101,14 @@ internal class TedPreViewActivity : AppCompatActivity() {
         val currentUri = mediaUriList[currentPosition]
         val isCurrentlySelected = selectedUriList.contains(currentUri)
 
-        val newSelectedList = if (isCurrentlySelected) {
-            selectedUriList.filter { it != currentUri }
+        if (isCurrentlySelected) {
+            selectedUriList.remove(currentUri)
         } else {
-            selectedUriList + currentUri
+            selectedUriList.add(currentUri)
         }
 
-        selectedUriList = newSelectedList
+        hasSelectionChanged = true
         updateUI()
-
-        // 결과 반환
-        setResult(RESULT_OK, Intent().apply {
-            putParcelableArrayListExtra(EXTRA_SELECTED_URI_LIST, ArrayList(selectedUriList))
-        })
     }
 
     private fun setSavedInstanceState(savedInstanceState: Bundle?) {
@@ -119,7 +125,7 @@ internal class TedPreViewActivity : AppCompatActivity() {
             return
         }
 
-        selectedUriList = bundle?.getParcelableArrayList(EXTRA_SELECTED_URI_LIST) ?: emptyList()
+        selectedUriList = (bundle?.getParcelableArrayList<Uri>(EXTRA_SELECTED_URI_LIST) ?: emptyList()).toMutableList()
 
         Logger.verbose("mediaUriList.size = ${mediaUriList.size}, selectedUriList.size = ${selectedUriList.size}")
     }
@@ -150,9 +156,14 @@ internal class TedPreViewActivity : AppCompatActivity() {
         adapter.releaseAllPlayers()
     }
 
+    @Deprecated("Deprecated in API level 33")
+    override fun onBackPressed() {
+        finishWithResult()
+    }
+
     companion object {
         private const val EXTRA_MEDIA_URI_LIST = "EXTRA_MEDIA_URI_LIST"
-        private const val EXTRA_SELECTED_URI_LIST = "EXTRA_SELECTED_URI_LIST"
+        const val EXTRA_SELECTED_URI_LIST = "EXTRA_SELECTED_URI_LIST"
 
         fun getIntent(
             context: Context,
