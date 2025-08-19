@@ -32,9 +32,9 @@ internal class TedImageZoomActivity : AppCompatActivity() {
 
         ViewCompat.setTransitionName(binding.ivMedia, uri.toString())
 
-        supportPostponeEnterTransition()
+//        supportPostponeEnterTransition()
         loadImage {
-            supportStartPostponedEnterTransition()
+//            supportStartPostponedEnterTransition()
         }
 
     }
@@ -42,32 +42,35 @@ internal class TedImageZoomActivity : AppCompatActivity() {
     private fun loadImage(onLoadingFinished: () -> Unit) {
         Logger.verbose("+")
 
-        val listener = object : RequestListener<Drawable> {
-            override fun onLoadFailed(
-                e: GlideException?,
-                model: Any?,
-                target: Target<Drawable>?,
-                isFirstResource: Boolean
-            ): Boolean {
-                onLoadingFinished()
-                return false
-            }
-
-            override fun onResourceReady(
-                resource: Drawable?,
-                model: Any?,
-                target: Target<Drawable>?,
-                dataSource: DataSource?,
-                isFirstResource: Boolean
-            ): Boolean {
-                onLoadingFinished()
-                return false
-            }
-        }
+//        val listener = object : RequestListener<Drawable> {
+//            override fun onLoadFailed(
+//                e: GlideException?,
+//                model: Any?,
+//                target: Target<Drawable?>?,
+//                isFirstResource: Boolean
+//            ): Boolean {
+//                onLoadingFinished()
+//                return false
+//            }
+//
+//            override fun onResourceReady(
+//                resource: Drawable?,
+//                model: Any?,
+//                target: Target<Drawable?>?,
+//                dataSource: DataSource?,
+//                isFirstResource: Boolean
+//            ): Boolean {
+//                onLoadingFinished()
+//                return false
+//            }
+//        }
+//
         Glide.with(this)
             .load(uri)
-            .apply(RequestOptions().dontTransform())
-            .listener(listener)
+//            .centerCrop()
+//            .apply(RequestOptions().fitCenter())
+//            .apply(RequestOptions().dontTransform())
+//            .listener(listener)
             .into(binding.ivMedia)
     }
 
