@@ -17,4 +17,11 @@
     <string name="ted_image_picker_select_more_photo_video_fmt">Select more %1$s</string>
     <string name="ted_image_picker_grant_full_access_photo_video_fmt">Grant full access %1$s</string>
     <string name="ted_image_picker_cancel">Cancel</string>
+    
+    <!-- Preview Activity -->
+    <string name="ted_image_picker_preview_title">Preview</string>
+    <string name="ted_image_picker_preview_title_format">%1$d / %2$d</string>
+    <string name="ted_image_picker_back">Back</string>
+    <string name="ted_image_picker_selection_status">Selection Status</string>
+    <string name="ted_image_picker_load_error">Failed to load media</string>
 </resources>

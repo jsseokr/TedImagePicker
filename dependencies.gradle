@@ -23,5 +23,10 @@ ext {
                     'annotation': 'com.github.bumptech.glide:compiler:4.12.0',
             ],
 
+            'exoplayer': [
+                    'core': 'androidx.media3:media3-exoplayer:1.2.1',
+                    'ui': 'androidx.media3:media3-ui:1.2.1',
+            ],
+
     ]
 }

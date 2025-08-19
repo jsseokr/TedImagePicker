@@ -1,0 +1,117 @@
+{
+  "folders": [
+    {
+      "name": "📱 TedImagePicker Library",
+      "path": "tedimagepicker"
+    },
+    {
+      "name": "📱 Sample App",
+      "path": "app"
+    },
+    {
+      "name": "⚙️ Build Scripts",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.associations": {
+      "*.gradle": "gradle",
+      "*.gradle.kts": "kotlin",
+      "*.kt": "kotlin",
+      "*.java": "java",
+      "*.xml": "xml"
+    },
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    },
+    "kotlin.linting.detekt.enabled": true,
+    "kotlin.linting.ktlint.enabled": true,
+    "java.format.enabled": true,
+    "java.cleanup.actionsOnSave": [
+      "addOverride",
+      "qualifyStaticMembers",
+      "qualifyMembers",
+      "addDeprecated",
+      "stringConcatenation",
+      "unnecessaryThis",
+      "unqualifiedStaticAccess",
+      "unqualifiedStaticMemberAccess"
+    ]
+  },
+  "extensions": {
+    "recommendations": [
+      "mathiasfrohlich.kotlin",
+      "vscjava.vscode-gradle",
+      "redhat.java",
+      "ms-vscode.vscode-xml",
+      "ms-andrewvscode.vscode-json"
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Clean Project",
+        "type": "shell",
+        "command": "./gradlew clean",
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "shared"
+        }
+      },
+      {
+        "label": "Build Library",
+        "type": "shell",
+        "command": "./gradlew :tedimagepicker:assembleRelease",
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "shared"
+        }
+      },
+      {
+        "label": "Build Sample App",
+        "type": "shell",
+        "command": "./gradlew :app:assembleDebug",
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "shared"
+        }
+      },
+      {
+        "label": "Run Tests",
+        "type": "shell",
+        "command": "./gradlew test",
+        "group": "test",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "shared"
+        }
+      }
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "android",
+        "request": "launch",
+        "name": "Launch Sample App",
+        "appSrcRoot": "${workspaceFolder}/app/src/main",
+        "apkFile": "${workspaceFolder}/app/build/outputs/apk/debug/app-debug.apk",
+        "adbPort": 5037
+      }
+    ]
+  }
+}

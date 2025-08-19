@@ -56,6 +56,10 @@ dependencies {
     implementation 'io.github.ParkSangGwon:tedonactivityresult-rx2:1.0.10'
 
     implementation 'com.alexvasilkov:gesture-views:2.5.2'
+    
+    // ExoPlayer for video playback
+    implementation deps.exoplayer.core
+    implementation deps.exoplayer.ui
 }
 
 

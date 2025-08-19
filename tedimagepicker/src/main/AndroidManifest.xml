@@ -34,6 +34,10 @@
             android:name=".zoom.TedImageZoomActivity"
             android:theme="@style/TedImagePickerTheme.Zoom" />
 
+        <activity
+            android:name=".TedPreViewActivity"
+            android:theme="@style/TedImagePickerTheme.Zoom" />
+
         <provider
             android:name=".util.TedImagePickerContentProvider"
             android:authorities="${applicationId}.tedimagepicker.provider"

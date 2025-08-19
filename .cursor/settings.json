@@ -1,0 +1,50 @@
+{
+  "projectName": "TedImagePicker",
+  "description": "Android용 이미지/비디오 선택 라이브러리",
+  "language": "kotlin",
+  "framework": "android",
+  "conventions": {
+    "naming": {
+      "classes": "PascalCase",
+      "functions": "camelCase",
+      "constants": "UPPER_SNAKE_CASE",
+      "packages": "lowercase"
+    },
+    "architecture": {
+      "pattern": "Builder Pattern",
+      "dataBinding": true,
+      "rxJava": "rxjava2"
+    }
+  },
+  "fileTypes": {
+    "kotlin": [".kt"],
+    "java": [".java"],
+    "xml": [".xml"],
+    "gradle": [".gradle", ".gradle.kts"]
+  },
+  "ignorePatterns": [
+    ".gradle/",
+    "build/",
+    ".idea/",
+    "*.iml",
+    "local.properties"
+  ],
+  "linting": {
+    "kotlin": {
+      "detekt": true,
+      "ktlint": true
+    },
+    "java": {
+      "checkstyle": true
+    }
+  },
+  "testing": {
+    "framework": "junit",
+    "coverage": true
+  },
+  "documentation": {
+    "readme": true,
+    "apiDocs": true,
+    "examples": true
+  }
+}

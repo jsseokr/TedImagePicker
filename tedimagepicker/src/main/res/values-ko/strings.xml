@@ -16,4 +16,11 @@
     <string name="ted_image_picker_select_more_photo_video_fmt">더 많은 %1$s 선택</string>
     <string name="ted_image_picker_grant_full_access_photo_video_fmt">모든 %1$s에 대한 접근 허용</string>
     <string name="ted_image_picker_cancel">취소</string>
+    
+    <!-- Preview Activity -->
+    <string name="ted_image_picker_preview_title">미리보기</string>
+    <string name="ted_image_picker_preview_title_format">%1$d / %2$d</string>
+    <string name="ted_image_picker_back">뒤로</string>
+    <string name="ted_image_picker_selection_status">선택 상태</string>
+    <string name="ted_image_picker_load_error">미디어 로드 실패</string>
 </resources>

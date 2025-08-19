@@ -20,6 +20,7 @@ import com.gun0912.tedpermission.rx2.TedPermission
 import com.tedpark.tedonactivityresult.rx2.TedRxOnActivityResult
 import gun0912.tedimagepicker.R
 import gun0912.tedimagepicker.TedImagePickerActivity
+import gun0912.tedimagepicker.TedPreViewActivity
 import gun0912.tedimagepicker.builder.listener.ImageSelectCancelListener
 import gun0912.tedimagepicker.builder.listener.OnErrorListener
 import gun0912.tedimagepicker.builder.listener.OnMultiSelectedListener
@@ -170,6 +171,17 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
     fun video(): B = mediaType(MediaType.VIDEO)
 
     fun imageAndVideo(): B = mediaType(MediaType.IMAGE_AND_VIDEO)
+
+    fun preview(
+        context: Context,
+        mediaUriList: List<Uri>,
+        selectedUriList: List<Uri> = emptyList()
+    ) {
+        Logger.verbose("+")
+        
+        val intent = TedPreViewActivity.getIntent(context, mediaUriList, selectedUriList)
+        context.startActivity(intent)
+    }
 
     fun cameraTileBackground(@ColorRes cameraTileBackgroundResId: Int): B {
         Logger.verbose("cameraTileBackgroundResId = $cameraTileBackgroundResId")

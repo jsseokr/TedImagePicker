@@ -68,6 +68,18 @@ class TedRxImagePicker {
             }
 
         }
+
+        fun preview(
+            mediaUriList: List<Uri>,
+            selectedUriList: List<Uri> = emptyList()
+        ) {
+            Logger.verbose("+")
+            
+            contextWeakReference.get()?.let {
+                preview(it, mediaUriList, selectedUriList)
+            }
+        }
+
     }
 
 

@@ -5,6 +5,7 @@ TedImagePicker is **simple/beautiful/smart** image picker
 - Support Image/Video/Image&Video
 - Support Single/Multi select
 - Support more configuration option
+- Support Preview with ViewPager2
 
 |       Image Select        |    Select Album    |          Scroller           |
 | :-----------------------: | :----------------: | :-------------------------: |
@@ -25,6 +26,7 @@ TedImagePicker is **simple/beautiful/smart** image picker
 ## Setup
 
 ### Gradle
+
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.ParkSangGwon/tedimagepicker.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.ParkSangGwon%22%20AND%20a:%tedimagepicker%22)
 
 ```gradle
@@ -98,172 +100,96 @@ TedImagePicker.with(this)
 
 ##### Multi image
 
-- Kotlin
-
 ```kotlin
 TedImagePicker.with(this)
     .startMultiImage { uriList -> showMultiImage(uriList) }
 ```
 
-- Java
-
 ```java
 TedImagePicker.with(this)
         .startMultiImage(new OnMultiSelectedListener() {
             @Override
-            public void onSelected(@NotNull List<? extends Uri> uriList) {
+            public void onSelected(@NotNull List<Uri> uriList) {
                 showMultiImage(uriList);
             }
         });
-TedImagePicker.with(this)
-        .startMultiImage(uriList -> {
-            showMultiImage(uriList);
-        });
 ```
 
-<br/>
-
 #### RxJava
-
-##### Single image
 
 ```kotlin
 TedRxImagePicker.with(this)
     .start()
-    .subscribe({ uri ->
-    }, Throwable::printStackTrace)
-```
+    .subscribe({ uri -> showSingleImage(uri) }, { throwable -> showError(throwable) })
 
-##### Multi image
-
-```kotlin
 TedRxImagePicker.with(this)
     .startMultiImage()
-    .subscribe({ uriList ->
-    }, Throwable::printStackTrace)
+    .subscribe({ uriList -> showMultiImage(uriList) }, { throwable -> showError(throwable) })
 ```
 
-</br></br>
+### 3.Preview Media with ViewPager2
 
-## Customize
+- Support both image and video preview
+- Swipe left/right to navigate
+- Show selection status
+- Auto-detect media type
 
-- You can customize what you want
+```kotlin
+// Preview all media with current selection
+val allMediaUris = listOf(uri1, uri2, uri3, ...)
+val selectedUris = listOf(uri1, uri3)
 
-### Function
+TedImagePicker.with(this)
+    .preview(allMediaUris, selectedUris)
 
-#### Common
-
-|      Function        |    Description    | 
-| ----------------------- | ---------------- |
-| `mediaType(MediaType)` | MediaType.IMAGE / MediaType.VIDEO / MediaType.IMAGE_AND_VIDEO |
-| `cameraTileBackground(R.color.xxx)`| camera Tile Background Color |
-| `cameraTileImage(R.drawable.xxx)` | camera tile image |
-| `showCameraTile(Boolean)` default `true` | show camera tile |
-| `scrollIndicatorDateFormat(String) (default: YYYY.MM)` | Format of date on scroll indicator |
-| `showTitle(Boolean)(default: true)` | Show title |
-| `title(String or R.string.xxx) (default: 'Select Image','사진 선택')` | title |
-| `backButton(R.drawable.xxx)` | back button |
-| `zoomIndicator(Boolean) (default: true)`| zoom indicator |
-| `image()` | image |
-| `video()` | video |
-| `imageAndVideo()` | image and video |
-| `imageCountTextFormat(String) (default: %s)`: `%s장`,  `Count: %s`| image count text format |
-| `savedDirectoryName(String)` | saved directory name from take picture using camera |
-| `startAnimation(Int, Int)` | start animation |
-| `finishAnimation(Int, Int)` | finish animation |
-| `errorListener()` | error listener for error |
-| `cancelListener()` | cancel listener |
-
-
-
-
-#### Multi Select
-
-|      Method        |    Description    | 
-| ----------------------- | ---------------- |
-| `selectedUri(List<Uri>)` | selected uri |
-| `buttonGravity(ButtonGravity)` | You can change `done` button location top or bottom |
-| `buttonText(String or R.string.xxx) (default: 'Done','완료')` | you can change `done` button text |
-| `buttonBackground(R.drawable.xxx) (default: Blue Background)` | you can change `done` button background color |
-| `buttonTextColor(R.color.xxx) (default: white)` | `done` button text color |
-| `buttonDrawableOnly(R.drawable.xxx) (default: false)` | If you want show drawable button without text, use this method |
-| `max(Int, String or R.string.xxx)` | **max content** should picked from user device |
-| `min(Int, String or R.string.xxx)` | **min content** should picked from user device |
-| `drawerAlbum() / dropDownAlbum() (default: Drawer)`| You can choice Drawer or DropDown album style |
-
-  </br></br>
-
-#### UI
-- Change picker primary color
-: override color name in your colors.xml
-```xml
-<color name="ted_image_picker_primary">#your_color_code</color>
-<color name="ted_image_picker_primary_pressed">#your_color_code</color>
+// Or use RxJava style
+TedRxImagePicker.with(this)
+    .preview(allMediaUris, selectedUris)
 ```
 
-- Change textAppearance style
-: override text style in your styles.xml
+```java
+// Java
+TedImagePicker.with(this)
+    .preview(allMediaUris, selectedUris);
 
-style list
-- TextAppearance.TedImagePicker.Subhead
-- TextAppearance.TedImagePicker.Body1
-- TextAppearance.TedImagePicker.Caption
-
-```xml
-<style name="TextAppearance.MyApp.Body1" parent="@style/TextAppearance.AppCompat.Body1">
-    <item name="android:textSize">...</item>
-    <item name="android:fontFamily">...</item>
-</style>
-<style name="TextAppearance.TedImagePicker.Body1" parent="@style/TextAppearance.MyApp.Body1" />
+TedRxImagePicker.with(this)
+    .preview(allMediaUris, selectedUris);
 ```
 
-## FAQ
-### - Do not need to check permissions?
+#### Preview Features
 
-- Yes, `TedImagePicker` automatically check permission.
-  : `TedImagePicker` use [TedPermission](https://github.com/ParkSangGwon/TedPermission)
-- But If you need You can check permission before start `TedImagePicker`.
+- **Media Type Detection**: Automatically detects image vs video
+- **Image Support**: Uses GestureImageView for zoom/pan
+- **Video Support**: Uses ExoPlayer for video playback
+- **Selection Toggle**: Tap selection icon to toggle selection
+- **Navigation**: Swipe left/right or use position indicator
+- **Lifecycle Management**: Automatically pauses/resumes video playback
 
-### - java.lang.NoClassDefFoundError: Failed resolution of: Landroidx/databinding/DataBinderMapperImpl;
+### 4.More configuration
 
-- You have to enable databinding
-- Read [this](https://github.com/ParkSangGwon/TedImagePicker/blob/master/README.md#1enable-databinding)
-
-#### - `Duplicate class android.support.v4.xxx`: Execution failed for task ':app:checkDebugDuplicateClasses'
-- Add `android.enableJetifier=true` in your gradle.properties file
-
-### - I'm using targetSdkVersion less than 33 and it doesn't work
-- You have to use `targetSdkVersion 33`
-- If you use targetSdkVersion 32, you can not support SDK 33(Android OS 13) device.
-- these day, there are so many android os 13 device.
-- So you have to use targetSdkVersion 33
-
-### - I'm using targetSdkVersion less than 34 and it doesn't work
-- Starting with targetSdkVersion 34, you need to control the permission READ_MEDIA_VISUAL_USER_SELECTED.
-: [Grant partial access to photos and videos](https://developer.android.com/about/versions/14/changes/partial-photo-video-access)
-- If you still keep targetSdkVersion set to 33 to not control the READ_MEDIA_VISUAL_USER_SELECTED permission, you need to add the code below to your Manifest file.
-```xml
-<uses-permission
-    android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"
-    tools:node="remove" />
+```kotlin
+TedImagePicker.with(this)
+    .mediaType(MediaType.IMAGE_AND_VIDEO)
+    .selectType(SelectType.MULTI)
+    .maxCount(10)
+    .minCount(1)
+    .showCameraTile(true)
+    .showTitle(true)
+    .title("Select Media")
+    .buttonText("Done")
+    .startMultiImage { uriList ->
+        // Handle selected media
+    }
 ```
 
-</br></br>
+## Features
 
-## License
-
-````code
-Copyright 2019 Ted Park
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.```
-````
+- **Media Types**: Image, Video, Image & Video
+- **Selection Modes**: Single, Multi
+- **Preview**: Full-screen preview with ViewPager2
+- **Camera Integration**: Built-in camera support
+- **Permissions**: Automatic permission handling
+- **RxJava Support**: Reactive programming support
+- **DataBinding**: Modern Android development
+- **Customization**: Extensive customization options
+- **Performance**: Optimized for large media collections

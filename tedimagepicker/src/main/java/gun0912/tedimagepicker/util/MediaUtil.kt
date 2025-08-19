@@ -11,6 +11,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import gun0912.tedimagepicker.builder.type.CameraMedia
+import gun0912.tedimagepicker.util.Logger
 import io.reactivex.Completable
 import java.io.File
 import java.text.SimpleDateFormat
@@ -102,6 +103,51 @@ internal class MediaUtil {
             return Completable.create { emitter ->
                 MediaScannerConnection.scanFile(context, arrayOf(uri.path), null)
                 { _, _ -> emitter.onComplete() }
+            }
+        }
+        
+        /**
+         * URI가 비디오인지 확인
+         */
+        fun isVideo(uri: Uri): Boolean {
+            return try {
+                val mimeType = uri.scheme?.let { scheme ->
+                    when (scheme) {
+                        "content" -> {
+                            // ContentResolver를 통해 MIME 타입 확인
+                            null // Context가 필요하므로 여기서는 null 반환
+                        }
+                        "file" -> {
+                            // 파일 확장자로 확인
+                            uri.path?.let { path ->
+                                val extension = path.substringAfterLast('.', "").lowercase()
+                                when (extension) {
+                                    "mp4", "avi", "mov", "wmv", "flv", "webm", "mkv", "3gp", "m4v" -> "video/*"
+                                    else -> null
+                                }
+                            }
+                        }
+                        else -> null
+                    }
+                }
+                
+                mimeType?.startsWith("video/") == true
+            } catch (e: Exception) {
+                Logger.error("MIME 타입 확인 실패: ${e.message}")
+                false
+            }
+        }
+        
+        /**
+         * Context를 사용하여 URI가 비디오인지 확인
+         */
+        fun isVideo(context: Context, uri: Uri): Boolean {
+            return try {
+                val mimeType = context.contentResolver.getType(uri)
+                mimeType?.startsWith("video/") == true
+            } catch (e: Exception) {
+                Logger.error("MIME 타입 확인 실패: ${e.message}")
+                false
             }
         }
     }

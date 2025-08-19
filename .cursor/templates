@@ -1,0 +1,158 @@
+# TedImagePicker 코드 템플릿
+
+## 1. 새로운 Builder 메서드 추가
+```kotlin
+fun newFeature(value: String): Builder {
+    Logger.verbose("+")
+    this.newFeatureValue = value
+    return this
+}
+
+fun newFeature(action: (String) -> Unit): Builder {
+    Logger.verbose("+")
+    this.newFeatureAction = action
+    return this
+}
+```
+
+## 2. 새로운 Listener 인터페이스
+```kotlin
+interface OnNewFeatureListener {
+    fun onNewFeature(result: String)
+}
+```
+
+## 3. 새로운 Adapter 클래스
+```kotlin
+class NewFeatureAdapter : BaseRecyclerViewAdapter<NewFeature, NewFeatureAdapter.ViewHolder>() {
+    
+    class ViewHolder(private val binding: ItemNewFeatureBinding) : BaseViewHolder<NewFeature>(binding) {
+        override fun bind(item: NewFeature) {
+            // 바인딩 로직 구현
+        }
+    }
+    
+    override fun getLayoutResourceId(viewType: Int): Int = R.layout.item_new_feature
+    
+    override fun createViewHolder(itemView: View, viewType: Int): ViewHolder {
+        return ViewHolder(ItemNewFeatureBinding.bind(itemView))
+    }
+}
+```
+
+## 4. 새로운 모델 클래스
+```kotlin
+@Parcelize
+data class NewFeature(
+    val id: Long,
+    val name: String,
+    val description: String
+) : Parcelable
+```
+
+## 5. 새로운 유틸리티 함수
+```kotlin
+object NewFeatureUtil {
+    fun processFeature(feature: NewFeature): String {
+        return try {
+            // 처리 로직
+            "성공"
+        } catch (e: Exception) {
+            Logger.error("새 기능 처리 실패", e)
+            "실패"
+        }
+    }
+}
+```
+
+## 6. RxJava 스타일 메서드
+```kotlin
+fun startNewFeature(): Single<String> {
+    return Single.create { emitter ->
+        try {
+            // 비동기 처리 로직
+            val result = processNewFeature()
+            emitter.onSuccess(result)
+        } catch (e: Exception) {
+            emitter.onError(e)
+        }
+    }
+}
+```
+
+## 7. 권한 처리
+```kotlin
+private fun checkNewFeaturePermission() {
+    TedPermission.create()
+        .setPermissionListener(object : PermissionListener {
+            override fun onPermissionGranted() {
+                // 권한 승인 시 처리
+            }
+            
+            override fun onPermissionDenied(deniedPermissions: ArrayList<String>) {
+                // 권한 거부 시 처리
+            }
+        })
+        .setDeniedMessage("새 기능을 사용하려면 권한이 필요합니다.")
+        .setPermissions(Manifest.permission.NEW_PERMISSION)
+        .check()
+}
+```
+
+## 8. 에러 처리
+```kotlin
+private fun handleNewFeatureError(throwable: Throwable) {
+    Logger.error("새 기능 에러", throwable)
+    onErrorListener?.onError(throwable)
+}
+```
+
+## 9. DataBinding 레이아웃
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="item"
+            type="gun0912.tedimagepicker.model.NewFeature" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{item.name}"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{item.description}"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+</layout>
+```
+
+## 10. 샘플 앱에서 사용 예제
+```kotlin
+// MainActivity.kt 또는 JavaActivity.java에 추가
+private fun showNewFeatureExample() {
+    TedImagePicker.with(this)
+        .newFeature("새로운 기능")
+        .start { result ->
+            // 결과 처리
+            Toast.makeText(this, "새 기능 결과: $result", Toast.LENGTH_SHORT).show()
+        }
+}
+```
